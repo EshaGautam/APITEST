@@ -14,11 +14,11 @@ function handleFormSubmit(event){
 
   axios
     .post(
-      "https://crudcrud.com/api/c4f1ed7f8cea426b8921fdab2d76f9da/AppointmentData",
+      "https://crudcrud.com/api/86c9d9d9494d4d5f9394229b3f64956c/AppointmentData",
       newUser
     )
     .then((response) => {
-      showOutput(response);
+    sendingData(response);
       console.log("Data added successfully");
     })
     .catch((error) => console.log(error));
@@ -31,10 +31,11 @@ function handleFormSubmit(event){
 window.addEventListener("DOMContentLoaded", () => {
   axios
     .get(
-      "https://crudcrud.com/api/c4f1ed7f8cea426b8921fdab2d76f9da/AppointmentData"
+      "https://crudcrud.com/api/86c9d9d9494d4d5f9394229b3f64956c/AppointmentData"
     )
-    .then((response) => {{
-         sendingData(response);
+    .then((response) => {
+      {
+        sendingData(response);
       }
     })
     .catch((error) => console.log(error));
@@ -70,6 +71,10 @@ function displayData(userData) {
   let DeleteButtonText = document.createTextNode("X");
   DeleteButton.appendChild(DeleteButtonText);
   DeleteButton.className = "del-btn";
+  DeleteButton.addEventListener("click", function (event) {
+      deleteUser(event,_id);
+      // removeTodo(_id); 
+    });
 
   // Creating Edit button
   let editButton = document.createElement("button");
@@ -81,3 +86,24 @@ function displayData(userData) {
   user.appendChild(editButton);
   userList.appendChild(user);
 }
+
+
+let userList = document.querySelector("ul");
+
+// Adding delete functionality and deleting fron crudcrud
+function deleteUser(event,_id) {
+  if (event.target.classList.contains("del-btn")) {
+    let userToDelete = event.target.parentElement;
+    userList.removeChild(userToDelete);
+  }
+  // deleting data from crudcrud
+    axios
+      .delete(
+        `https://crudcrud.com/api/86c9d9d9494d4d5f9394229b3f64956c/AppointmentData/${_id}`
+      )
+      .then((response) => sendingData(response))
+      .catch((error) => console.error(error));
+
+    console.log("DELETE Request");
+}
+
